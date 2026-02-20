@@ -1,0 +1,17 @@
+name: Close Issues with completed or wontfix labels
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  close-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    if: github.event.label.name == 'completed' || github.event.label.name == 'wontfix'
+    steps:
+      - name: Close Issue
+        run: gh issue close ${{ github.event.issue.number }} --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
